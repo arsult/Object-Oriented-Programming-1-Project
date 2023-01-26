@@ -1,15 +1,21 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
 
+    private static ArrayList<Course> courses;
+    private static ArrayList<Student> students;
+    private static ArrayList<Instructor> instructors;
+
     public static void main(String[] args) throws FileNotFoundException {
 
-        // Retreive Students, Courses Data from files
-        ArrayList<Course> courses = setupCourses();
-        ArrayList<Student> students = setupStudentsData();
+        // Retrieve Students, Courses Data from files
+        courses = setupCourses();
+        students = setupStudentsData();
+        instructors = setupInstructorsData();
 
         /*
         Create a drop menu to
@@ -86,6 +92,49 @@ public class Main {
         scanner.close();
 
         return students;
+    }
+
+    public static ArrayList<Instructor> setupInstructorsData() throws FileNotFoundException {
+        ArrayList<Instructor> instructors = new ArrayList<>();
+        File file = new File("Instructors.txt");
+        Scanner scanner = new Scanner(file);
+
+
+        while (scanner.hasNext()) {
+            String line = scanner.nextLine();
+
+            // Ignore comments on file.
+            if (line.startsWith("//") || line.isBlank()) {
+                continue;
+            }
+
+            String[] tokens = line.split(", ");
+            String instructorName = tokens[0];
+            String instructorID = tokens[1];
+            String instructorDepartment = tokens[2];
+            String instructorScheduleBlock = tokens[3];
+            String[] coursesTaught = tokens[4].split("~");
+
+            ArrayList<Course> instructorCourses = new ArrayList<>();
+            for (String taught : coursesTaught) {
+                for (Course course : courses) {
+                    if (course.getCourseShortcut().equals(taught)) {
+                        instructorCourses.add(course);
+                    }
+                }
+            }
+
+            instructors.add(new Instructor(instructorName, instructorID, instructorDepartment, new Schedule().getBlock(instructorScheduleBlock), instructorCourses));
+
+        }
+        if (instructors.isEmpty()) {
+            System.out.println("instructors file is empty");
+        } else {
+            System.out.println(instructors.get(0));
+        }
+        scanner.close();
+
+        return instructors;
     }
 
 }

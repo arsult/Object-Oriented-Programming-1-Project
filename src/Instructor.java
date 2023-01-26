@@ -9,12 +9,12 @@ public class Instructor {
     private Schedule schedule;
     private ArrayList<Course> currentCourses; // Instructor's Courses in current semester (level)
 
-    public Instructor(String name, String universityID, String department, Schedule schedule) {
+    public Instructor(String name, String universityID, String department, Schedule schedule, ArrayList<Course> currentCourses) {
         this.name = name;
         this.universityID = universityID;
         this.schedule = schedule;
         this.department = department;
-        this.currentCourses = new ArrayList<>();
+        this.currentCourses = currentCourses;
     }
 
     public String getName() {
