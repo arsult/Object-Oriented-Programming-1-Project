@@ -136,5 +136,10 @@ public class Main {
 
         return instructors;
     }
+    //albara add menu method 
+     public static void menu(){
+        System.out.println("1. Add a student\n2. Add a course\n3. Add a schedule block\n4. View all students"
+                + "\n5. View all courses\n6. View all schedule blocks\n7. Exit");
+    }
 
 }
