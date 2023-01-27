@@ -1,3 +1,8 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Course {
 
     private String courseName;
@@ -38,6 +43,38 @@ public class Course {
 
     public int getCourseCredits() {
         return courseCredits;
+    }
+
+    public static ArrayList<Course> setupCourses() throws FileNotFoundException {
+        ArrayList<Course> courses = new ArrayList<>();
+        File file = new File("Courses.txt");
+        Scanner scanner = new Scanner(file);
+
+        while (scanner.hasNext()) {
+            String line = scanner.nextLine();
+
+            // Ignore comments on file.
+            if (line.startsWith("//") || line.isBlank()) {
+                continue;
+            }
+
+            String[] tokens = line.split(", ");
+            String courseName = tokens[0];
+            String courseFaculty = tokens[1];
+            String courseDepartment = tokens[2];
+            String courseLevel = tokens[3];
+            String courseCode = tokens[4];
+            int courseCredits = Integer.parseInt(tokens[5]);
+
+            courses.add(new Course(courseName, courseFaculty, courseDepartment, courseLevel, courseCode, courseCredits));
+        }
+
+        if (courses.isEmpty()) {
+            System.out.println("Courses file is empty");
+        }
+
+        scanner.close();
+        return courses;
     }
 
     @Override
