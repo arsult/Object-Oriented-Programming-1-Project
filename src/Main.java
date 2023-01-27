@@ -34,7 +34,7 @@ public class Main {
 
                     break;
                 case 4: // View all students
-
+                    viewStudents();
                     break;
                 case 5: // View all courses
                     viewCourses();
@@ -56,7 +56,6 @@ public class Main {
         } while (choice != 7);
 
     }
-
 
     //albara add menu method 
     public static void menu() {
@@ -113,6 +112,16 @@ public class Main {
         for (Course course : courses) {
             System.out.println(course.getCourseName() + " (" + course.getCourseCode() + ")");
         }
+    }
+
+    public static void viewStudents() throws FileNotFoundException{
+        System.out.println("Listing all the available courses");
+
+        for (Student student : students) {
+            System.out.println(student);
+            System.out.println("---------------");
+        }
+
     }
 
 }
