@@ -43,8 +43,13 @@ public class Student {
     public static ArrayList<Student> setupStudentsData() throws FileNotFoundException {
         ArrayList<Student> students = new ArrayList<>();
         File file = new File("Students.txt");
-        Scanner scanner = new Scanner(file);
 
+        if (!file.exists()) {
+            System.out.println("The Students.txt file does not exist!");
+            return new ArrayList<>();
+        }
+
+        Scanner scanner = new Scanner(file);
 
         while (scanner.hasNext()) {
             String line = scanner.nextLine();
@@ -65,11 +70,9 @@ public class Student {
         }
         if (students.isEmpty()) {
             System.out.println("Student file is empty");
-        } else {
-            System.out.println(students.get(0));
         }
-        scanner.close();
 
+        scanner.close();
         return students;
     }
 

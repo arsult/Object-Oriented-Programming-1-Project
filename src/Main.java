@@ -18,6 +18,8 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
+        new Schedule().readSchedule();
+
         do {
 
             menu();
@@ -114,7 +116,7 @@ public class Main {
         }
     }
 
-    public static void viewStudents() throws FileNotFoundException{
+    public static void viewStudents() {
         System.out.println("Listing all the available courses");
 
         for (Student student : students) {

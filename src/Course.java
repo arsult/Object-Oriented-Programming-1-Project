@@ -48,6 +48,12 @@ public class Course {
     public static ArrayList<Course> setupCourses() throws FileNotFoundException {
         ArrayList<Course> courses = new ArrayList<>();
         File file = new File("Courses.txt");
+
+        if (!file.exists()) {
+            System.out.println("The Courses.txt file does not exist!");
+            return new ArrayList<>();
+        }
+
         Scanner scanner = new Scanner(file);
 
         while (scanner.hasNext()) {

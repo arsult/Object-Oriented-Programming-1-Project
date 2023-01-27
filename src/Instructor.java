@@ -71,8 +71,6 @@ public class Instructor {
         }
         if (instructors.isEmpty()) {
             System.out.println("instructors file is empty");
-        } else {
-            System.out.println(instructors.get(0));
         }
         scanner.close();
 
