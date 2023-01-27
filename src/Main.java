@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -28,6 +27,8 @@ public class Main {
         7. Exit
          */
 
+        menu();
+
     }
 
     public static ArrayList<Course> setupCourses() throws FileNotFoundException {
@@ -49,8 +50,9 @@ public class Main {
             String courseDepartment = tokens[2];
             String courseLevel = tokens[3];
             String courseCode = tokens[4];
+            int courseCredits = Integer.parseInt(tokens[5]);
 
-            courses.add(new Course(courseName, courseFaculty, courseDepartment, courseLevel, courseCode));
+            courses.add(new Course(courseName, courseFaculty, courseDepartment, courseLevel, courseCode, courseCredits));
         }
 
         if (courses.isEmpty()) {
@@ -118,7 +120,7 @@ public class Main {
             ArrayList<Course> instructorCourses = new ArrayList<>();
             for (String taught : coursesTaught) {
                 for (Course course : courses) {
-                    if (course.getCourseShortcut().equals(taught)) {
+                    if (course.getCourseCode().equals(taught)) {
                         instructorCourses.add(course);
                     }
                 }
@@ -138,8 +140,15 @@ public class Main {
     }
     //albara add menu method 
     public static void menu(){
-        System.out.println("1. Add a student\n2. Add a course\n3. Add a schedule block\n4. View all students"
-                + "\n5. View all courses\n6. View all schedule blocks\n7. Exit\nenter your choice:");
+        System.out.println("""
+                1. Add a student
+                2. Add a course
+                3. Add a schedule block
+                4. View all students
+                5. View all courses
+                6. View all schedule blocks
+                7. Exit
+                Enter your choice:\s""");
     }
 
 }
