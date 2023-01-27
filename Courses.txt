@@ -16,6 +16,6 @@ Academic Writing, Computer Science and Engineering, Information Technology, 113,
 Computing Ethics, Computer Science and Engineering, Cyber-security, 112, CCCY-112, 2
 Introduction to Programming, Computer Science and Engineering, Computer Science, 111, CCCS-111, 3
 Linear Algebra, Science, Mathematics, 221, SCMT-221, 3
-Object-Oriented Programming, Computer Science and Engineering, Computer Science, 121, CCCS-121, 3
+Object-Oriented Programming 1, Computer Science and Engineering, Computer Science, 121, CCCS-121, 3
 Discrete Mathematics, Computer Science and Engineering, Computer Science, 122, CCCS-122, 3
 General Physics 2, Science, Physics, 211, SCPH-211, 4
