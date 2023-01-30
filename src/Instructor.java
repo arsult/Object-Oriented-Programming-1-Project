@@ -35,7 +35,6 @@ public class Instructor {
         return currentCourses;
     }
 
-
     public static ArrayList<Instructor> setupInstructorsData(ArrayList<Course> courses) throws FileNotFoundException {
         ArrayList<Instructor> instructors = new ArrayList<>();
         File file = new File("Instructors.txt");
