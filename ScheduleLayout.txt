@@ -1,0 +1,6 @@
+						Showing Schedule for Sunday:
+
+Time:					Course:			        	Code:			Classroom:
+8:00 AM -8:50 AM		General Mathematics 		SCMT-101		    404
+9:00 AM -9:50 AM		Introduction to Com.		CCCS-1000		    505
+1:00 AM -1:50 AM		General Physics			    SCPH-101		    606

@@ -6,20 +6,29 @@ public class Main {
 
     private static ArrayList<Course> courses;
     private static ArrayList<Student> students;
-    private static ArrayList<Instructor> instructors;
 
     public static void main(String[] args) throws IOException {
 
         // Retrieve Students, Courses Data from files
         courses = Course.setupCourses();
         students = Student.setupStudentsData();
-        instructors = Instructor.setupInstructorsData(courses);
 
         Scanner scanner = new Scanner(System.in);
         int choice;
 
-        new Schedule().readSchedule();
+        String test = "Object Oriented Programming 2";
+        int size = 20;
+        System.out.println(test);
+        if (test.length() > size) {
+            test = test.substring(0,size);
+        }
 
+        System.out.println(test);
+
+        if (true) {
+            return;
+        }
+        new Schedule().readSchedule();
         do {
 
             menu();
@@ -62,6 +71,14 @@ public class Main {
     //albara add menu method 
     public static void menu() {
 
+        // Add Student
+
+        // Available Student Information
+        // Insert Student ID
+        // View Schedule
+
+        // Remove Course to Schedule
+
         System.out.println("1. Add a Student");
         System.out.println("2. Add a Course");
         System.out.println("3. Add a Schedule Block"); // may be removed
@@ -73,6 +90,7 @@ public class Main {
     }
 
     // Append to Students.txt file
+    // Adopt the idea of creating a new file for each student.
     public static void addStudent() throws IOException {
         FileWriter fileWriter = new FileWriter("Students.txt", true);
         PrintWriter printWriter = new PrintWriter(fileWriter);

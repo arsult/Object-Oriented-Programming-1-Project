@@ -34,7 +34,7 @@ public class Schedule {
     public String readSchedule() throws FileNotFoundException {
         File file = new File("ScheduleBlock_1.txt");
         Scanner scanner = new Scanner(file);
-
+        int daysCounter = 0;
         while (scanner.hasNext()) {
             String line = scanner.nextLine();
 
@@ -43,16 +43,24 @@ public class Schedule {
                 continue;
             }
 
-            if (line.startsWith("Sunday: ")) {
-                //https://stackoverflow.com/questions/12595019/how-to-get-a-string-between-two-characters
+            ScheduleDays[] allDays = ScheduleDays.values();
 
-                String firstCourse = line.split(": ")[1].split(", ")[0];
-                String day = firstCourse.substring(firstCourse.indexOf("(") + 1, firstCourse.indexOf(")")); // Get the time between the ( )
-                System.out.println("from " + day.replace("-", " to "));
+            for (ScheduleDays currentDay : allDays) {
+                String day = currentDay.toString();
+
+                if (line.startsWith(day +": ")) {
+                    System.out.println("Showing courses for day: " + day);
+                    String[] courseWithTime = line.split(": ")[1].split(", ");
+
+                    for (String lie : courseWithTime) {
+                        String course = lie.substring(0, lie.indexOf("("));
+                        String time = lie.substring(lie.indexOf("(") + 1, lie.indexOf(")")); // Get the time between the ( )
+                        System.out.println(course + " Time: " + "from " + time.replace("-", " to "));
+                    }
+
+                }
             }
-
         }
-
         return "";
     }
 
