@@ -5,92 +5,104 @@ import java.util.Scanner;
 public class Main {
 
     public static ArrayList<Course> courses;
-    public static ArrayList<Student> students;
 
     public static void main(String[] args) throws IOException {
 
-        // Retrieve Students, Courses Data from files
+        // Setup courses
         courses = Course.setupCourses();
-        students = Student.setupStudentsData();
-
-        Scanner scanner = new Scanner(System.in);
-        int choice;
-
-        new Schedule().viewStudentSchedule();
-
-        if (true) {
-            return;
-        }
-        do {
-
-            menu();
-            choice = scanner.nextInt();
-
-            switch (choice) {
-                case 1: // Add a student
-                    addStudent();
-                    break;
-                case 2: // Add a course
-
-                    break;
-                case 3: // Add a schedule block(?)
-
-                    break;
-                case 4: // View all students
-                    viewStudents();
-                    break;
-                case 5: // View all courses
-                    viewCourses();
-                    break;
-                case 6: // View all schedule blocks(?)
-
-                    break;
-                case 7: // Exit the program
-                    System.out.println("Exiting program...");
-                    System.exit(0);
-                default: // Invalid input.
-                    System.out.println();
-                    System.out.println("Invalid input.");
-                    System.out.println("Please select an option from the menu.");
-                    System.out.println();
-                    break;
-            }
-
-        } while (choice != 7);
-
-    }
-
-    //albara add menu method 
-    public static void menu() {
-
-        // Add Student
-
-        // Available Student Information
-        // Insert Student ID
-        // View Schedule
-
-        // Remove Course to Schedule
-
-        System.out.println("1. Add a Student");
-        System.out.println("2. Add a Course");
-        System.out.println("3. Add a Schedule Block"); // may be removed
-        System.out.println("4. View all Students");
-        System.out.println("5. View all Courses");
-        System.out.println("6. View all Schedule Blocks"); // may be removed
-        System.out.println("7. Exit");
-        System.out.print("Enter your choice: ");
-    }
-
-    // Append to Students.txt file
-    // Adopt the idea of creating a new file for each student.
-    public static void addStudent() throws IOException {
-        FileWriter fileWriter = new FileWriter("Students.txt", true);
-        PrintWriter printWriter = new PrintWriter(fileWriter);
 
         Scanner scan = new Scanner(System.in);
-        String name, ID, block, level;
 
-        System.out.println("Enter the following Student Information Data: ");
+        System.out.println();
+        System.out.println("\t\t\t Welcome to UJ Courses and Schedule Project");
+        System.out.println();
+        System.out.print("Please enter a student ID number: ");
+
+        String id = scan.nextLine();
+        File file = new File(id + ".txt");
+
+        if (!file.exists()) {
+
+            System.out.println("This student does not exists in the database.");
+            System.out.println("Do you wish to add this student into the database? (Yes / No)");
+
+            String input = scan.nextLine();
+            char answer = input.charAt(0);
+
+            if (answer == 'Y' || answer == 'y') { // Proceed to add student
+
+                addStudent(id);
+
+            } else { //No, or invalid input
+
+                System.out.println("Exiting Program");
+                System.exit(0);
+            }
+
+        } else { // Student does exist
+
+            System.out.println();
+            System.out.println("This student exists in the database.");
+            System.out.println("What do you wish to do with this student?");
+            System.out.println();
+
+            System.out.println("1. View Student Information");
+            System.out.println("2. Modify Student Schedule");
+            System.out.println();
+
+            System.out.print("Enter your choice: ");
+            int selection = scan.nextInt();
+
+            switch (selection) {
+
+                case 1:
+
+                    System.out.println();
+                    System.out.println("\t\t\tShowing Student's Information\n\n");
+
+                    break;
+
+                case 2:
+
+                    System.out.println();
+                    System.out.println("\t\t\tShowing Schedule\n\n");
+                    System.out.println("Which command do you want to perform on this schedule?");
+                    System.out.println("Currently the available commands are listed below");
+                    System.out.println();
+
+                    System.out.println("1. View course details");
+                    System.out.println("2. Remove a course");
+                    System.out.println("3. Go back");
+                    System.out.println();
+
+                    System.out.print("Enter your choice: ");
+                    selection = scan.nextInt();
+
+                    switch (selection) {
+                        case 1:
+
+                            break;
+                        case 2:
+
+                            break;
+
+                        default:
+                            System.out.println("Going back...");
+                            break;
+                    }
+            }
+        }
+    }
+
+    // Adopt the idea of creating a new file for each student.
+    public static void addStudent(String studentID) throws IOException {
+        PrintWriter printWriter = new PrintWriter(studentID + ".txt");
+
+
+        Scanner scan = new Scanner(System.in);
+        String name, level;
+
+        System.out.println("Please enter the following student information: ");
 
         /*
         Apply User Input-Validation here such as.
@@ -98,41 +110,48 @@ public class Main {
         Students Schedule Block must exist (Show prompt)
         Students Level must be equivalent to the schedule block
          */
-        System.out.print("Enter the Student's Name: ");
+        System.out.print("1. Enter the student full name: ");
         name = scan.nextLine();
-        System.out.print("Enter the Student's ID: ");
-        ID = scan.nextLine();
-        System.out.print("Enter the Student's Schedule Block: ");
-        block = scan.nextLine();
-        System.out.print("Enter the Student's Level: ");
+
+        System.out.print("2. Enter the student semester level (1 to 4): ");
         level = scan.nextLine();
 
         // Possible idea is to create a new file for each student.
-        printWriter.println(name + ", " + ID + ", " + block + ", " + level);
+        printWriter.println("# Student Information");
 
-        fileWriter.close();
+        printWriter.println(name + ", " + studentID + ", " + level);
+        printWriter.println();
+
+        printWriter.println("# Schedule");
+
+        String block = Long.toString(Long.parseLong(studentID) % 2 + 1);
+
+        File scheduleBlockFile = new File("ScheduleBlocks.txt");
+        Scanner scheduleBlockScanner = new Scanner(scheduleBlockFile);
+
+        while (scheduleBlockScanner.hasNext()) {
+            String line = scheduleBlockScanner.nextLine();
+
+            if (line.startsWith("//") || line.isBlank()) {
+                continue;
+            }
+
+            if (line.equalsIgnoreCase("#ScheduleBlock_" + level + "_" + block)) {
+                line = scheduleBlockScanner.nextLine();
+
+                while (!line.startsWith("Thursday")) {
+                    line = scheduleBlockScanner.nextLine();
+                    printWriter.println(line);
+                }
+
+                break;
+            }
+        }
+
         printWriter.close();
         //scan.close(); Do not close this Scanner, Closing this scanner will result in closing the Input Stream which will result in a NoSuchElementException Error
 
-        System.out.println("Student " + name + " has been successfully registered.");
-
-    }
-
-    // Fetch courses from our ArrayList, No need to read the file
-    public static void viewCourses() {
-        System.out.println("Listing all the available courses");
-        for (Course course : courses) {
-            System.out.println(course.getCourseName() + " (" + course.getCourseCode() + ")");
-        }
-    }
-
-    public static void viewStudents() {
-        System.out.println("Listing all the available courses");
-
-        for (Student student : students) {
-            System.out.println(student);
-            System.out.println("---------------");
-        }
+        System.out.println("Student " + name + " with ID " + studentID + " has been successfully registered.");
 
     }
 

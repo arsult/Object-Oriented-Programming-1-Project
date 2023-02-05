@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Schedule {
@@ -31,10 +30,9 @@ public class Schedule {
         return workingDays;
     }
 
-    public void viewStudentSchedule() throws FileNotFoundException {
+    public void viewStudentSchedule(String selectedDay) throws FileNotFoundException {
         File file = new File("ScheduleReader.txt");
         Scanner scan = new Scanner(file);
-        Scanner userScanner = new Scanner(System.in);
         String line;
 
         // Starting reading from the file
@@ -50,7 +48,6 @@ public class Schedule {
             if (line.startsWith("#Schedule")) {
                 // Testing
                 System.out.print("Enter a day to view the student's schedule: ");
-                String selectedDay = userScanner.nextLine();
 
                 // Get all the working days from our enum class.
                 for (ScheduleDays allDays : ScheduleDays.values()) {

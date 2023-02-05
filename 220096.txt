@@ -1,11 +1,7 @@
-// Prototype for students
-// Name, ID, Level
+# Student Information
+Albara , 220096, 1
 
-#Information
-Eyad Alghamdi, 12345, 1
-
-#Schedule
-
+# Schedule
 Sunday: CCCS-100(8:00 AM-8:50 AM), SCMT-101(9:00 AM-9:50 AM), SCPH-101(1:00 PM-1:50 PM)
 Monday: ELPR-101(8:00 AM-12:00 PM), BCSC-100(1:00 PM-2:50 PM)
 Tuesday: CCCS-100(8:00 AM-8:50 AM), SCMT-101(9:00 AM-9:50 AM), SCPH-101(1:00 PM-1:50 PM)

@@ -1,4 +1,4 @@
-// This file contains the schedule blocks for each level of student.
+// This file contains all the standard schedule blocks for each student.
 
 //ScheduleBlock_Level_BlockNo
 // Level -> Term

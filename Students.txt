@@ -1,7 +1,0 @@
-// Student name, Student ID, ScheduleBlock, Student Level
-
-Eyad Abdullah Alghamdi, 123456, Block1, 4
-Khalid Ahmad Alharbi, 223314, Block1, 1
-Albara hitheme Abumansoor, 220048, Block2, 3
-Abdullah Alkhaldi, 2221421, Block1, 2
-Mohammed, 224000, Block3, 5
