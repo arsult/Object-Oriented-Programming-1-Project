@@ -12,6 +12,7 @@ public class Main {
         courses = Course.setupCourses();
 
         Scanner scan = new Scanner(System.in);
+        Student student = new Student();
 
         System.out.println();
         System.out.println("\t\t\t Welcome to UJ Courses and Schedule Project");
@@ -20,6 +21,8 @@ public class Main {
 
         String id = scan.nextLine();
         File file = new File(id + ".txt");
+
+        student.setUniversityID(id);
 
         if (!file.exists()) {
 
@@ -31,7 +34,7 @@ public class Main {
 
             if (answer == 'Y' || answer == 'y') { // Proceed to add student
 
-                addStudent(id);
+                addStudent(student);
 
             } else { //No, or invalid input
 
@@ -94,13 +97,11 @@ public class Main {
         }
     }
 
-    // Adopt the idea of creating a new file for each student.
-    public static void addStudent(String studentID) throws IOException {
-        PrintWriter printWriter = new PrintWriter(studentID + ".txt");
+    // Move to student class and make the proccess in the main method rather than here.
 
-
+    public static void addStudent(Student student) throws IOException {
+        PrintWriter printWriter = new PrintWriter(student.getUniversityID() + ".txt");
         Scanner scan = new Scanner(System.in);
-        String name, level;
 
         System.out.println("Please enter the following student information: ");
 
@@ -111,20 +112,20 @@ public class Main {
         Students Level must be equivalent to the schedule block
          */
         System.out.print("1. Enter the student full name: ");
-        name = scan.nextLine();
+        student.setName(scan.nextLine());
 
         System.out.print("2. Enter the student semester level (1 to 4): ");
-        level = scan.nextLine();
+        student.setLevel(scan.nextInt());
 
         // Possible idea is to create a new file for each student.
         printWriter.println("# Student Information");
 
-        printWriter.println(name + ", " + studentID + ", " + level);
+        printWriter.println(student.getName() + ", " + student.getUniversityID() + ", " + student.getLevel());
         printWriter.println();
 
         printWriter.println("# Schedule");
 
-        String block = Long.toString(Long.parseLong(studentID) % 2 + 1);
+        String block = Long.toString(Long.parseLong(student.getUniversityID()) % 2 + 1);
 
         File scheduleBlockFile = new File("ScheduleBlocks.txt");
         Scanner scheduleBlockScanner = new Scanner(scheduleBlockFile);
@@ -136,7 +137,7 @@ public class Main {
                 continue;
             }
 
-            if (line.equalsIgnoreCase("#ScheduleBlock_" + level + "_" + block)) {
+            if (line.equalsIgnoreCase("#ScheduleBlock_" + student.getLevel() + "_" + block)) {
                 line = scheduleBlockScanner.nextLine();
 
                 while (!line.startsWith("Thursday")) {
@@ -151,7 +152,7 @@ public class Main {
         printWriter.close();
         //scan.close(); Do not close this Scanner, Closing this scanner will result in closing the Input Stream which will result in a NoSuchElementException Error
 
-        System.out.println("Student " + name + " with ID " + studentID + " has been successfully registered.");
+        System.out.println("Student " + student.getName() + " with ID " + student.getUniversityID() + " has been successfully registered.");
 
     }
 
