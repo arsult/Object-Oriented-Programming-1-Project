@@ -83,6 +83,15 @@ public class Course {
         return courses;
     }
 
+    public static String findCourseGeneralName(String courseCode) {
+        for (Course course : Main.courses) {
+            if (course.getCourseCode().equals(courseCode)){
+                return course.getCourseName();
+            }
+        }
+        return "null";
+    }
+
     @Override
     public String toString() {
         return "Name: " + courseName + "\n"

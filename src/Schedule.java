@@ -31,37 +31,79 @@ public class Schedule {
         return workingDays;
     }
 
-    public String readSchedule() throws FileNotFoundException {
-        File file = new File("ScheduleBlock_1.txt");
-        Scanner scanner = new Scanner(file);
-        int daysCounter = 0;
-        while (scanner.hasNext()) {
-            String line = scanner.nextLine();
+    public void viewStudentSchedule() throws FileNotFoundException {
+        File file = new File("ScheduleReader.txt");
+        Scanner scan = new Scanner(file);
+        Scanner userScanner = new Scanner(System.in);
+        String line;
 
-            // Ignore comments on file.
-            if (line.startsWith("//") || line.isBlank()) {
+        // Starting reading from the file
+        while (scan.hasNext()) {
+            line = scan.nextLine();
+
+            // Ignore any comments written in the file starting by // or a blank line or any student's information, since we are only looking for their schedule.
+            if (line.startsWith("//") || line.isBlank() || line.startsWith("#Information")) {
                 continue;
             }
 
-            ScheduleDays[] allDays = ScheduleDays.values();
+            // We've found the students schedule, proceed to split it apart
+            if (line.startsWith("#Schedule")) {
+                // Testing
+                System.out.print("Enter a day to view the student's schedule: ");
+                String selectedDay = userScanner.nextLine();
 
-            for (ScheduleDays currentDay : allDays) {
-                String day = currentDay.toString();
+                // Get all the working days from our enum class.
+                for (ScheduleDays allDays : ScheduleDays.values()) {
+                    String day = allDays.toString();
 
-                if (line.startsWith(day +": ")) {
-                    System.out.println("Showing courses for day: " + day);
-                    String[] courseWithTime = line.split(": ")[1].split(", ");
+                    // If the requested day is available, then proceed
+                    if (day.equalsIgnoreCase(selectedDay)) {
 
-                    for (String lie : courseWithTime) {
-                        String course = lie.substring(0, lie.indexOf("("));
-                        String time = lie.substring(lie.indexOf("(") + 1, lie.indexOf(")")); // Get the time between the ( )
-                        System.out.println(course + " Time: " + "from " + time.replace("-", " to "));
+                        // Read-jumping from the file till we find our requested day from the user.
+                        for (int i = 0; i < allDays.ordinal() + 1; i++) {
+                            line = scan.nextLine();
+                        }
+
+                        // Designing-output.
+                        System.out.printf("%24s Showing Schedule for %s:\n", " ", day);
+                        System.out.printf("%s:%20s: %20s: %20s:\n", "Time", "Course", "Code", "Classroom");
+
+                        String[] courseWithTime = line.split(": ")[1].split(", ");
+
+                        for (String tokenOfCourses : courseWithTime) {
+
+                            String courseCode = tokenOfCourses.substring(0, tokenOfCourses.indexOf("(")); // Take only the course code from the file
+                            String course = Course.findCourseGeneralName(courseCode); // Find the general name of the course from the course code we've just taken
+
+                            if (course.length() > 20) { // Cut the course short to only 20 words.
+                                course = course.substring(0, 20);
+                            }
+
+                            String time = tokenOfCourses.substring(tokenOfCourses.indexOf("(") + 1, tokenOfCourses.indexOf(")")); // Get the time between the ( )
+
+                            // Designing-output.
+                            System.out.print(time + "    " + course + "");//4 spaces
+
+                            /*
+                            Required for designing the correct output of the schedule, since the general name of the course varys in length
+                            We need to find the amount of spaces required for the course-code to be in the correct column by using the provided equation below.
+                             */
+
+                            int courseCodeIndention = 24 - course.length(); // 20 words -> only 4 indention, 19 words -> 5 indentions, etc...
+                            for (int indention = 0; indention < courseCodeIndention; indention++){
+                                System.out.print(" ");
+                            }
+
+                            System.out.print(courseCode + "            " + "404" + "\n"); //12 spaces
+                        }
                     }
-
                 }
+
+                break;
+
             }
+
         }
-        return "";
     }
 
     public Schedule getBlock(String str) {
@@ -70,24 +112,13 @@ public class Schedule {
 
 }
 
-// Rough idea
 enum ScheduleDays {
 
-    SUNDAY(new ArrayList<>()),
-    MONDAY(new ArrayList<>()),
-    TUESDAY(new ArrayList<>()),
-    WEDNESDAY(new ArrayList<>()),
-    THURSDAY(new ArrayList<>());
-
-    private ArrayList<Course> coursesPerDay;
-
-    ScheduleDays(ArrayList<Course> coursesPerDay) {
-        this.coursesPerDay = coursesPerDay;
-    }
-
-    public ArrayList<Course> getCoursesPerDay() {
-        return coursesPerDay;
-    }
+    SUNDAY,
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY;
 
     @Override
     public String toString() {

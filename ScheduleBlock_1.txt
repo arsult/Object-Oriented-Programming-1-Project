@@ -1,32 +1,33 @@
-// Day: Courses,
-// Prep year Schedule Block 1 Level 1
-#Information
+// This file contains the schedule blocks for each level of student.
 
-#Schedule
+//ScheduleBlock_Level_BlockNo
+// Level -> Term
+
+#ScheduleBlock_1_1
+
 Sunday: CCCS-100(8:00 AM-8:50 AM), SCMT-101(9:00 AM-9:50 AM), SCPH-101(1:00 PM-1:50 PM)
 Monday: ELPR-101(8:00 AM-12:00 PM), BCSC-100(1:00 PM-2:50 PM)
 Tuesday: CCCS-100(8:00 AM-8:50 AM), SCMT-101(9:00 AM-9:50 AM), SCPH-101(1:00 PM-1:50 PM)
 Wednesday: ELPR-101(8:00 AM-12:00 PM), BCSC-100(1:00 PM-2:50 PM)
 Thursday: CCCS-100(8:00 AM-8:50 AM), SCMT-101(9:00 AM-9:50 AM), SCPH-101(1:00 PM-1:50 PM)
 
-// different schedul but same courses
+#ScheduleBlock_1_2
 
-#ScheduleBlock1
 Sunday: ELPR-101(8:00 AM-12:00 PM), BCSC-100(1:00 PM-2:50 PM)
-Monday:  CCCS-100(8:00 AM-90 AM), SCMT-101(9:30 AM-10:50 AM), SCPH-101(1:00 PM-2:20 PM)
+Monday: CCCS-100(8:00 AM-90 AM), SCMT-101(9:30 AM-10:50 AM), SCPH-101(1:00 PM-2:20 PM)
 Tuesday: ELPR-101(8:00 AM-12:00 PM), BCSC-100(1:00 PM-2:50 PM)
-Wendsday:CCCS-100(8:00 AM-90 AM), SCMT-101(9:30 AM-10:50 AM), SCPH-101(1:00 PM-2:20 PM)
-Tuesday: //off
+Wednesday: CCCS-100(8:00 AM-90 AM), SCMT-101(9:30 AM-10:50 AM), SCPH-101(1:00 PM-2:20 PM)
+Thursday:
 
-// level 1 2nd semester
-
-#ScheduleBlock2
+#ScheduleBlock_2_1
 
 Sunday: SCBI-101(8:00 AM-8:50 AM), SCCH-101(9:00 AM-9:50 AM)
 Monday: ELPR-101(8:00 AM-12:00 PM), SEPS-100-100(1:00 PM-2:50 PM)
 Tuesday: SCBI-101(8:00 AM-8:50 AM), SCCH-101(9:00 AM-9:50 AM), CLPR-100(4:00 PM-5:50 PM)
 Wednesday: ELPR-101(8:00 AM-12:00 PM), SEPS-100-100(1:00 PM-2:50 PM)
 Thursday: SCBI-101(8:00 AM-8:50 AM), SCCH-101(9:00 AM-9:50 AM)
+
+#ScheduleBlock_2_2
 
 Sunday: ELPR-101(8:00 AM-12:00 PM), SEPS-100-100(1:00 PM-2:50 PM)
 Monday: SCBI-101(8:00 AM-8:50 AM), SCCH-101(9:00 AM-9:50 AM)

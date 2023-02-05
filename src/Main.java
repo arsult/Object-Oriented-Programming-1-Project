@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static ArrayList<Course> courses;
-    private static ArrayList<Student> students;
+    public static ArrayList<Course> courses;
+    public static ArrayList<Student> students;
 
     public static void main(String[] args) throws IOException {
 
@@ -16,19 +16,11 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
-        String test = "Object Oriented Programming 2";
-        int size = 20;
-        System.out.println(test);
-        if (test.length() > size) {
-            test = test.substring(0,size);
-        }
-
-        System.out.println(test);
+        new Schedule().viewStudentSchedule();
 
         if (true) {
             return;
         }
-        new Schedule().readSchedule();
         do {
 
             menu();
