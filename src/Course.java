@@ -21,6 +21,15 @@ public class Course {
         this.courseCredits = courseCredits;
     }
 
+    public Course() {
+        this.courseName = "";
+        this.courseFaculty = "";
+        this.courseDepartment = "";
+        this.courseLevel = "";
+        this.courseCode = "";
+        this.courseCredits = 0;
+    }
+
     public String getCourseName() {
         return courseName;
     }
@@ -83,13 +92,13 @@ public class Course {
         return courses;
     }
 
-    public static String findCourseGeneralName(String courseCode) {
+    public static Course findCourse(String courseCode) {
         for (Course course : Main.courses) {
             if (course.getCourseCode().equals(courseCode)){
-                return course.getCourseName();
+                return course;
             }
         }
-        return "null";
+        return new Course();
     }
 
     @Override

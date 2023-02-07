@@ -70,7 +70,7 @@ public class Schedule {
                         for (String tokenOfCourses : courseWithTime) {
 
                             String courseCode = tokenOfCourses.substring(0, tokenOfCourses.indexOf("(")); // Take only the course code from the file
-                            String course = Course.findCourseGeneralName(courseCode); // Find the general name of the course from the course code we've just taken
+                            String course = Course.findCourse(courseCode).getCourseName(); // Find the general name of the course from the course code we've just taken
 
                             if (course.length() > 20) { // Cut the course short to only 20 words.
                                 course = course.substring(0, 20);
