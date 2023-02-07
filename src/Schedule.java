@@ -1,36 +1,112 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Schedule {
 
-    private String fileName;
-    private int studentLevel;
-    private ScheduleDays workingDays;
+    private Course course;
+    private String time;
+    private String classroom;
+    private ScheduleDays day;
 
-    public Schedule(String fileName, int studentLevel, ScheduleDays workingDays) {
-        this.fileName = fileName;
-        this.studentLevel = studentLevel;
-        this.workingDays = workingDays;
+    public Schedule(Course course, String time, String classroom, ScheduleDays day) {
+        this.course = course;
+        this.time = time;
+        this.classroom = classroom;
+        this.day = day;
     }
 
     public Schedule() {
 
     }
 
-    public String getFileName() {
-        return fileName;
+    public Course getCourse() {
+        return course;
     }
 
-    public void addSchedule() {
-
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
-    public ScheduleDays getWorkingDays() {
-        return workingDays;
+    public String getTime() {
+        return time;
     }
 
-    public void viewStudentSchedule(String selectedDay) throws FileNotFoundException {
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getClassroom() {
+        return classroom;
+    }
+
+    public void setClassroom(String classroom) {
+        this.classroom = classroom;
+    }
+
+    public ScheduleDays getDay() {
+        return day;
+    }
+
+    public void setDay(ScheduleDays day) {
+        this.day = day;
+    }
+
+    public static ArrayList<Schedule> readSchedule(Student student) throws FileNotFoundException {
+        ArrayList<Schedule> schedules = new ArrayList<>();
+
+        File file = new File(student.getUniversityID() + ".txt");
+        Scanner scan = new Scanner(file);
+        String line;
+
+        while (scan.hasNext()) {
+            line = scan.nextLine();
+
+            // Ignore any comments written in the file starting by // or a blank line or any student's information, since we are only looking for their schedule.
+            if (line.startsWith("//") || line.isBlank() || line.startsWith("# Student Information")) {
+                continue;
+            }
+
+            // We've found the students schedule, proceed to split it apart
+            if (line.startsWith("# Schedule")) {
+                line = scan.nextLine();
+
+                while (!line.startsWith("Thursday")) {
+
+                    String day = line.split(": ")[0];
+
+                    String[] splitter = line.split(": ");
+                    String courses;
+
+                    if (splitter.length > 1) { // Day is not off...
+                        courses = splitter[1];
+                    } else {
+                        continue;
+                    }
+
+                    String[] courseData = courses.split(", ");
+
+                    for (String tokenOfCourses : courseData) {
+
+                        String courseCode = tokenOfCourses.substring(0, tokenOfCourses.indexOf("(")); // Take only the course code from the file
+                        Course course = Course.findCourse(courseCode); // Find the general name of the course from the course code we've just taken
+                        String time = tokenOfCourses.substring(tokenOfCourses.indexOf("(") + 1, tokenOfCourses.indexOf(")")); // Get the time between the ( )
+
+                        schedules.add(new Schedule(course, time, "404", ScheduleDays.valueOf(day.toUpperCase())));
+                    }
+
+                    line = scan.nextLine();
+                }
+
+            }
+        }
+
+
+        return schedules;
+    }
+
+    public static void viewStudentSchedule(String selectedDay) throws FileNotFoundException {
         File file = new File("ScheduleReader.txt");
         Scanner scan = new Scanner(file);
         String line;
@@ -46,8 +122,6 @@ public class Schedule {
 
             // We've found the students schedule, proceed to split it apart
             if (line.startsWith("#Schedule")) {
-                // Testing
-                System.out.print("Enter a day to view the student's schedule: ");
 
                 // Get all the working days from our enum class.
                 for (ScheduleDays allDays : ScheduleDays.values()) {
@@ -87,7 +161,8 @@ public class Schedule {
                              */
 
                             int courseCodeIndention = 24 - course.length(); // 20 words -> only 4 indention, 19 words -> 5 indentions, etc...
-                            for (int indention = 0; indention < courseCodeIndention; indention++){
+
+                            for (int indention = 0; indention < courseCodeIndention; indention++) {
                                 System.out.print(" ");
                             }
 
@@ -95,18 +170,15 @@ public class Schedule {
                         }
                     }
                 }
-
                 break;
-
             }
-
         }
     }
 
-    public Schedule getBlock(String str) {
-        return new Schedule();
+    @Override
+    public String toString() {
+        return course.getCourseCode() + " " + time + " " + classroom + " " + day.toString() + " \n";
     }
-
 }
 
 enum ScheduleDays {

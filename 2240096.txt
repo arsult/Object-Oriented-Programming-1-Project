@@ -1,0 +1,9 @@
+# Student Information
+Albara Hathim Abo Almansour, 2240096, 2
+
+# Schedule
+Sunday: SCBI-101(8:00 AM-8:50 AM), SCCH-101(9:00 AM-9:50 AM)
+Monday: ELPR-101(8:00 AM-12:00 PM), SEPS-100-100(1:00 PM-2:50 PM)
+Tuesday: SCBI-101(8:00 AM-8:50 AM), SCCH-101(9:00 AM-9:50 AM), CLPR-100(4:00 PM-5:50 PM)
+Wednesday: ELPR-101(8:00 AM-12:00 PM), SEPS-100-100(1:00 PM-2:50 PM)
+Thursday: SCBI-101(8:00 AM-8:50 AM), SCCH-101(9:00 AM-9:50 AM)

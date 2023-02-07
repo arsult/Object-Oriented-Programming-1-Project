@@ -1,0 +1,9 @@
+# Student Information
+E, 1, 1
+
+# Schedule
+Sunday: ELPR-101(8:00 AM-12:00 PM), BCSC-100(1:00 PM-2:50 PM)
+Monday: CCCS-100(8:00 AM-9:00 AM), SCMT-101(9:30 AM-10:50 AM), SCPH-101(1:00 PM-2:20 PM)
+Tuesday: ELPR-101(8:00 AM-12:00 PM), BCSC-100(1:00 PM-2:50 PM)
+Wednesday: CCCS-100(8:00 AM-90 AM), SCMT-101(9:30 AM-10:50 AM), SCPH-101(1:00 PM-2:20 PM)
+Thursday:

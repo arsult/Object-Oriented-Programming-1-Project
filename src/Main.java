@@ -26,6 +26,7 @@ public class Main {
 
         if (!file.exists()) {
 
+            System.out.println();
             System.out.println("This student does not exists in the database.");
             System.out.println("Do you wish to add this student into the database? (Yes / No)");
 
@@ -34,7 +35,19 @@ public class Main {
 
             if (answer == 'Y' || answer == 'y') { // Proceed to add student
 
-                addStudent(student);
+                System.out.println("Please enter the following student information: ");
+                System.out.println();
+
+                System.out.print("1. Enter the student full name: ");
+                student.setName(scan.nextLine());
+
+                System.out.print("2. Enter the student semester level (1 to 4): ");
+                student.setLevel(scan.nextInt());
+
+                student.saveData();
+
+                System.out.println();
+                System.out.println("Student " + student.getName() + " with ID " + student.getUniversityID() + " has been successfully registered.");
 
             } else { //No, or invalid input
 
@@ -61,7 +74,10 @@ public class Main {
                 case 1:
 
                     System.out.println();
-                    System.out.println("\t\t\tShowing Student's Information\n\n");
+                    System.out.println("\t\t\tShowing Student's Information");
+
+                    System.out.println(student);
+                    System.out.println(Schedule.readSchedule(student));
 
                     break;
 
@@ -69,6 +85,7 @@ public class Main {
 
                     System.out.println();
                     System.out.println("\t\t\tShowing Schedule\n\n");
+
                     System.out.println("Which command do you want to perform on this schedule?");
                     System.out.println("Currently the available commands are listed below");
                     System.out.println();
@@ -96,64 +113,4 @@ public class Main {
             }
         }
     }
-
-    // Move to student class and make the proccess in the main method rather than here.
-
-    public static void addStudent(Student student) throws IOException {
-        PrintWriter printWriter = new PrintWriter(student.getUniversityID() + ".txt");
-        Scanner scan = new Scanner(System.in);
-
-        System.out.println("Please enter the following student information: ");
-
-        /*
-        Apply User Input-Validation here such as.
-        Student's ID must be 7 digits
-        Students Schedule Block must exist (Show prompt)
-        Students Level must be equivalent to the schedule block
-         */
-        System.out.print("1. Enter the student full name: ");
-        student.setName(scan.nextLine());
-
-        System.out.print("2. Enter the student semester level (1 to 4): ");
-        student.setLevel(scan.nextInt());
-
-        // Possible idea is to create a new file for each student.
-        printWriter.println("# Student Information");
-
-        printWriter.println(student.getName() + ", " + student.getUniversityID() + ", " + student.getLevel());
-        printWriter.println();
-
-        printWriter.println("# Schedule");
-
-        String block = Long.toString(Long.parseLong(student.getUniversityID()) % 2 + 1);
-
-        File scheduleBlockFile = new File("ScheduleBlocks.txt");
-        Scanner scheduleBlockScanner = new Scanner(scheduleBlockFile);
-
-        while (scheduleBlockScanner.hasNext()) {
-            String line = scheduleBlockScanner.nextLine();
-
-            if (line.startsWith("//") || line.isBlank()) {
-                continue;
-            }
-
-            if (line.equalsIgnoreCase("#ScheduleBlock_" + student.getLevel() + "_" + block)) {
-                line = scheduleBlockScanner.nextLine();
-
-                while (!line.startsWith("Thursday")) {
-                    line = scheduleBlockScanner.nextLine();
-                    printWriter.println(line);
-                }
-
-                break;
-            }
-        }
-
-        printWriter.close();
-        //scan.close(); Do not close this Scanner, Closing this scanner will result in closing the Input Stream which will result in a NoSuchElementException Error
-
-        System.out.println("Student " + student.getName() + " with ID " + student.getUniversityID() + " has been successfully registered.");
-
-    }
-
 }
