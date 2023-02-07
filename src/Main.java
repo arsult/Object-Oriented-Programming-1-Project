@@ -77,7 +77,8 @@ public class Main {
                     System.out.println("\t\t\tShowing Student's Information");
 
                     System.out.println(student);
-                    System.out.println(Schedule.readSchedule(student));
+                 //   System.out.println(Schedule.readSchedule(student));
+                    Schedule.viewStudentSchedule(student, "Thursday");
 
                     break;
 

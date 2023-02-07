@@ -38,7 +38,6 @@ public class Student {
         this.level = 0;
     }
 
-
     /**
      * Default Setter
      *
@@ -65,7 +64,6 @@ public class Student {
     public void setUniversityID(String universityID) {
         this.universityID = universityID;
     }
-
 
     /**
      * Default Getter
