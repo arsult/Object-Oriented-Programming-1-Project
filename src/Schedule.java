@@ -3,6 +3,14 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/*
+ * This class is designed to read the schedule from the ScheduleBlocks file or the student file
+ * also aside from reading it can also display the Schedule of the student or from the ScheduleBlock file
+ * With this class we are able to manipulate data and add commands we wish to do on a student's schedule as such
+ *  Removing a Course or View a Course details easily.
+ *
+ */
+
 public class Schedule {
 
     private Course course;
@@ -10,6 +18,13 @@ public class Schedule {
     private String classroom;
     private String day;
 
+    /** Constructor
+     *
+     * @param course, Takes an object of type course so we are able to identify the data of the course we are working with
+     * @param time, Takes an object of type string that tell us the start and end time of the course
+     * @param classroom, Takes an object of type string that tell us the classroom of the course in a specified day
+     * @param day, Takes an object of type string that tell us the day that this course is available on
+     */
     public Schedule(Course course, String time, String classroom, String day) {
         this.course = course;
         this.time = time;
@@ -17,6 +32,9 @@ public class Schedule {
         this.day = day;
     }
 
+    /** A default constructor
+     *
+     */
     public Schedule() {
 
     }
@@ -64,7 +82,7 @@ public class Schedule {
             line = scan.nextLine();
 
             // Ignore any comments written in the file starting by // or a blank line or any student's information, since we are only looking for their schedule.
-            if (line.startsWith("//") || line.isBlank() || line.startsWith("# Student Information")) {
+            if (line.startsWith("//") || line.isBlank()) {
                 continue;
             }
 
@@ -82,7 +100,7 @@ public class Schedule {
                     if (splitter.length > 1) { // Day is not off...
                         courses = splitter[1];
                     } else {
-                        schedules.add(new Schedule(null, "", "", day)); // Day off
+                        schedules.add(new Schedule(new Course(), "", "", day)); // Day off
                         continue;
                     }
 
@@ -144,6 +162,6 @@ public class Schedule {
 
     @Override
     public String toString() {
-        return (course != null ? course.getCourseCode() : "") + " " + time + " " + classroom + " " + day.toString() + " \n";
+        return (course != null ? course.getCourseCode() : "") + " " + time + " " + classroom + " " + day + " \n";
     }
 }

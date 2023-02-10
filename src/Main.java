@@ -1,15 +1,11 @@
-import java.io.*;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
 
-    public static ArrayList<Course> courses;
-
     public static void main(String[] args) throws IOException {
-
-        // Setup courses
-        courses = Course.setupCourses();
+        Course.setupCourses(); // Set up all courses
 
         Scanner scan = new Scanner(System.in);
         Student student = new Student();
@@ -19,7 +15,20 @@ public class Main {
         System.out.println();
         System.out.print("Please enter a student ID number: ");
 
-        String id = scan.nextLine();
+        String id;
+
+        do {
+            id = scan.nextLine();
+
+            if (!validateStudentID(id)) {
+                System.out.println();
+                System.out.println("Invalid student ID");
+                System.out.println("A student ID must be only 7 digits.");
+                System.out.print("Please enter a student ID number: ");
+            }
+
+        } while (!validateStudentID(id));
+
         File file = new File(id + ".txt");
 
         student.setUniversityID(id);
@@ -57,12 +66,16 @@ public class Main {
 
         } else { // Student does exist
 
+            // Read student's data
+            student.readData();
+
             System.out.println();
             System.out.println("This student exists in the database.");
             System.out.println("What do you wish to do with this student?");
             System.out.println();
 
             System.out.println("1. View Student Information");
+//            System.out.println("2. Modify Student Information");
             System.out.println("2. Modify Student Schedule");
             System.out.println();
 
@@ -75,10 +88,11 @@ public class Main {
 
                     System.out.println();
                     System.out.println("\t\t\tShowing Student's Information");
+                    System.out.println();
 
                     System.out.println(student);
-                 //   System.out.println(Schedule.readSchedule(student));
-                    Schedule.viewStudentSchedule(student, "Thursday");
+                    System.out.println();
+
 
                     break;
 
@@ -99,9 +113,30 @@ public class Main {
                     System.out.print("Enter your choice: ");
                     selection = scan.nextInt();
 
+                    Scanner inputScanner = new Scanner(System.in);
+
                     switch (selection) {
                         case 1:
+                            String courseCode;
+                            Course course;
+                            do {
+                                System.out.print("Enter the course code (E.g CCCS-100): ");
+                                courseCode = inputScanner.nextLine();
+                                course = Course.findCourse(courseCode);
 
+                                if (course == null) {
+                                    System.out.println();
+                                    System.out.println("This course does not exists");
+                                    System.out.println("Please enter a valid course code");
+                                }
+
+                            } while (course == null);
+
+                            System.out.println();
+                            System.out.println("\t\t\tViewing Course Details");
+                            System.out.println();
+
+                            System.out.println(course);
                             break;
                         case 2:
 
@@ -114,4 +149,17 @@ public class Main {
             }
         }
     }
+
+    private static boolean validateStudentID(String ID) {
+        if (ID.length() != 7) {
+            return false;
+        }
+        for (int i = 0; i < ID.length(); i++) {
+            if (!Character.isDigit(ID.charAt(i))){
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

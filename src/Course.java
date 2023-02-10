@@ -12,6 +12,8 @@ public class Course {
     private String courseCode;
     private int courseCredits;
 
+    public static ArrayList<Course> allCourses;
+
     public Course(String courseName, String courseFaculty, String courseDepartment, String courseLevel, String courseCode, int courseCredits) {
         this.courseName = courseName;
         this.courseFaculty = courseFaculty;
@@ -55,7 +57,8 @@ public class Course {
     }
 
     public static ArrayList<Course> setupCourses() throws FileNotFoundException {
-        ArrayList<Course> courses = new ArrayList<>();
+        allCourses = new ArrayList<>();
+
         File file = new File("Courses.txt");
 
         if (!file.exists()) {
@@ -81,31 +84,33 @@ public class Course {
             String courseCode = tokens[4];
             int courseCredits = Integer.parseInt(tokens[5]);
 
-            courses.add(new Course(courseName, courseFaculty, courseDepartment, courseLevel, courseCode, courseCredits));
+            allCourses.add(new Course(courseName, courseFaculty, courseDepartment, courseLevel, courseCode, courseCredits));
         }
 
-        if (courses.isEmpty()) {
+        if (allCourses.isEmpty()) {
             System.out.println("Courses file is empty");
         }
 
+        System.out.println("Courses have been setup successfully with size of (" + allCourses.size() + ")");
+
         scanner.close();
-        return courses;
+        return allCourses;
     }
 
     public static Course findCourse(String courseCode) {
-        for (Course course : Main.courses) {
+        for (Course course : allCourses) {
             if (course.getCourseCode().equals(courseCode)){
                 return course;
             }
         }
-        return new Course();
+        return null;
     }
 
     @Override
     public String toString() {
         return "Name: " + courseName + "\n"
-                + "Faculty: " + courseFaculty + "\n"
-                + "Department: " + courseDepartment + "\n"
+                + "College: College of " + courseFaculty + "\n"
+                + "Department: Department of " + courseDepartment + "\n"
                 + "Level: " + courseLevel + "\n"
                 + "Code: " + courseCode + "\n"
                 + "Credits: " + courseCredits + "\n";

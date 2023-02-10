@@ -93,11 +93,9 @@ public class Student {
     }
 
     /**
-     *
      * A functionally method, that will create a new file based on the University ID of the student and save their
      * General information such as their full name, ID, current semester level and their schedule block
      * where the student is able to modify it later.
-     *
      */
 
     public void saveData() throws FileNotFoundException {
@@ -115,7 +113,7 @@ public class Student {
 
         // Read Schedule blocks.
         File scheduleBlockFile = new File("ScheduleBlocks.txt"); // Instance of the ScheduleBlocks.txt file
-        Scanner scheduleBlockScanner = new Scanner(scheduleBlockFile); // Creating an object of Scanner so we are able to read from the file.
+        Scanner scheduleBlockScanner = new Scanner(scheduleBlockFile); // Creating an object of Scanner, so we are able to read from the file.
 
         while (scheduleBlockScanner.hasNext()) { // If we did not reach the end of file
             String line = scheduleBlockScanner.nextLine(); // Obtain the current line of reading.
@@ -129,20 +127,59 @@ public class Student {
                 line = scheduleBlockScanner.nextLine(); // Jump to the next line
 
                 // Read all the days in the schedule block selected
-                while (!line.startsWith("Thursday")) {
-                    line = scheduleBlockScanner.nextLine();
-                    printWriter.println(line);
+                while (!line.startsWith("Thursday")) { // If we haven't reached the end of the schedule yet
+                    line = scheduleBlockScanner.nextLine(); // Read the next line
+                    printWriter.println(line); // and paste it in the student's file.
                 }
 
-                break;
+                break; // Break out the outer while loop
             }
         }
 
         printWriter.close();
     }
 
+    /**
+     * Another functionally method that will read the information of the specified student from their files and then
+     * save the data into the data fields in this class
+     * therefore reading the existing data of the student from their file, so we can work with these data.
+     *
+     */
+
+    public void readData() throws FileNotFoundException {
+
+        File file = new File(universityID + ".txt"); // set up file for reading
+        Scanner scanner = new Scanner(file);
+
+        String line; // our pointer to where the file reads
+
+        while (scanner.hasNext()) {
+            line = scanner.nextLine(); // read the first line of the file.
+
+            if (line.equalsIgnoreCase("# Student Information")) { // if the first line matches our information header
+                line = scanner.nextLine(); // read beyond that by 1 line.
+
+                // Start tokenizing the information.
+                String[] tokens = line.split(", ");
+                name = tokens[0]; // The first token will contain the student name
+                universityID = tokens[1]; // The second token will contain the student university id
+                level = Integer.parseInt(tokens[2]); // the third token will contain their current semester level.
+
+                break; // break out of the loop since we have found our wanted information.
+            }
+
+        }
+
+    }
+
+    /**
+     * Overriding the default toString to show the student data
+     *
+     * @return The student data in a formatted form.
+     */
     @Override
     public String toString() {
-        return ""; // Will design later...
+        return "Student's Name: " + name + "\nStudent's ID: " + universityID + "\nStudent's Semester level: " + level;
     }
+
 }
