@@ -1,6 +1,12 @@
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
+import org.bson.types.ObjectId;
+
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /*
@@ -14,6 +20,7 @@ public class Student {
     private String name;
     private String universityID;
     private int level;
+    private ArrayList<Schedule> schedule;
 
     /**
      * Constructor
@@ -23,10 +30,11 @@ public class Student {
      * @param level,        will receive their current semester level and based on that we can determine their schedule block.
      */
 
-    public Student(String name, String universityID, int level) {
+    public Student(String name, String universityID, int level, ArrayList<Schedule> schedule) {
         this.name = name;
         this.universityID = universityID;
         this.level = level;
+        this.schedule = schedule;
     }
 
     /**
@@ -36,6 +44,7 @@ public class Student {
         this.name = null;
         this.universityID = null;
         this.level = 0;
+        this.schedule = null;
     }
 
     /**
@@ -92,82 +101,121 @@ public class Student {
         return universityID;
     }
 
-    /**
-     * A functionally method, that will create a new file based on the University ID of the student and save their
-     * General information such as their full name, ID, current semester level and their schedule block
-     * where the student is able to modify it later.
-     */
 
-    public void saveData() throws FileNotFoundException {
-        PrintWriter printWriter = new PrintWriter(universityID + ".txt"); // Create a new file based on the ID of the student
+    public ArrayList<Schedule> getSchedule() {
+        return schedule;
+    }
 
-        printWriter.println("# Student Information"); // Write the header for the student general information
-
-        printWriter.println(name + ", " + universityID + ", " + level); // Write the general information of student separated by commas.
-        printWriter.println();
-
-        printWriter.println("# Schedule"); // Write a header for the student schedule block
-
-        int block = (int) (Long.parseLong(universityID) % 2 + 1); // This line will determine which schedule block the student receives based on their university id
-        // If the student ID is even, then the first schedule block in the level will be chosen, If the student ID is odd, then the second schedule block in the level will be chosen.
-
-        // Read Schedule blocks.
-        File scheduleBlockFile = new File("ScheduleBlocks.txt"); // Instance of the ScheduleBlocks.txt file
-        Scanner scheduleBlockScanner = new Scanner(scheduleBlockFile); // Creating an object of Scanner, so we are able to read from the file.
-
-        while (scheduleBlockScanner.hasNext()) { // If we did not reach the end of file
-            String line = scheduleBlockScanner.nextLine(); // Obtain the current line of reading.
-
-            if (line.startsWith("//") || line.isBlank()) { // Ignore comments made by the user
-                continue;
-            }
-
-            // If the student level and block match the one on the ScheduleBlock file
-            if (line.equalsIgnoreCase("#ScheduleBlock_" + level + "_" + block)) {
-                line = scheduleBlockScanner.nextLine(); // Jump to the next line
-
-                // Read all the days in the schedule block selected
-                while (!line.startsWith("Thursday")) { // If we haven't reached the end of the schedule yet
-                    line = scheduleBlockScanner.nextLine(); // Read the next line
-                    printWriter.println(line); // and paste it in the student's file.
-                }
-
-                break; // Break out the outer while loop
-            }
-        }
-
-        printWriter.close();
+    public void setSchedule(ArrayList<Schedule> schedule) {
+        this.schedule = schedule;
     }
 
     /**
-     * Another functionally method that will read the information of the specified student from their files and then
-     * save the data into the data fields in this class
-     * therefore reading the existing data of the student from their file, so we can work with these data.
+     * This method will calculate the cumulative credit hours for the student.
+     * The arraylist of schedules in data field is constructed by that each day has a schedule for it,
+     * with that in mind this means that multiple days could have the same course, and we certainly do not need to count for duplicate course hours
+     * The duplicates arraylist stores the course after calculating it credit hours therefore we are eliminating the possibility of counting the credit hours more than once.
      *
+     * @return The total credit hours that the student has in their current schedule
+     */
+    public int calculateCumulativeCreditHours() {
+        int total = 0;
+        ArrayList<Course> duplicates = new ArrayList<>();
+
+        for (Schedule studentSchedule : schedule) {
+            if (duplicates.contains(studentSchedule.getCourse())) {
+                continue;
+            }
+            duplicates.add(studentSchedule.getCourse());
+            total += studentSchedule.getCourse().getCourseCredits();
+        }
+        return total;
+    }
+
+    /**
+     * functionally method, that will create a new file based on the University ID of the student and save their
+     * General information such as their full name, ID, current semester level and their schedule block
+     * where the student is able to modify it later.
+     */
+    public void registerStudentData() {
+        Schedule schedule = new Schedule(this); // come here
+
+        MongoCollection<Document> studentCollection = Database.getDatabase().getCollection(universityID);
+        MongoCollection<Document> scheduleBlockCollection = Database.getDatabase().getCollection("ScheduleBlocks");
+
+        Document document = new Document("_id", universityID);
+
+        document.append("Name", name);
+        document.append("Level", level);
+
+        int block = (Database.countCollections() - 3) % 3 + 1;
+
+        String scheduleBlock = scheduleBlockCollection.find(new Document("_id", Database.scheduleBlocksObjectId)).first().getString("ScheduleBlock_" + level + "_" + block);
+
+        document.append("Schedule", scheduleBlock);
+        studentCollection.insertOne(document);
+
+        this.schedule = schedule.readSchedule();
+    }
+
+    /**
+     * Another functionally method that will read the information of the specified student from their database collection and then
+     * save the data into the data fields in this class
+     * therefore reading the existing data of the student from their collection, so we can work with these data.
      */
 
-    public void readData() throws FileNotFoundException {
+    public void readStudentData() {
+        MongoCollection<Document> studentCollection = Database.getDatabase().getCollection(universityID);
 
-        File file = new File(universityID + ".txt"); // set up file for reading
-        Scanner scanner = new Scanner(file);
+        name = studentCollection.find(new Document("_id", universityID)).first().getString("Name");
+        level = studentCollection.find(new Document("_id", universityID)).first().getInteger("Level");
+        universityID = studentCollection.find(new Document("_id", universityID)).first().getString("_id");
+    }
 
-        String line; // our pointer to where the file reads
 
-        while (scanner.hasNext()) {
-            line = scanner.nextLine(); // read the first line of the file.
+    public void viewStudentSchedule() {
+        System.out.println("_____________________________________________________________________________");
 
-            if (line.equalsIgnoreCase("# Student Information")) { // if the first line matches our information header
-                line = scanner.nextLine(); // read beyond that by 1 line.
+        for (int i = 0; i < Days.values().length; i++) {
+            String day = Days.values()[i].name();
 
-                // Start tokenizing the information.
-                String[] tokens = line.split(", ");
-                name = tokens[0]; // The first token will contain the student name
-                universityID = tokens[1]; // The second token will contain the student university id
-                level = Integer.parseInt(tokens[2]); // the third token will contain their current semester level.
+            System.out.printf("%35s\n\n", day);
+            System.out.printf("%s:%20s: %20s: %20s:\n", "Time", "Course", "Code", "Classroom");
 
-                break; // break out of the loop since we have found our wanted information.
+            for (Schedule schedule : this.schedule) {
+                if (schedule.getDay().equalsIgnoreCase(day)) {
+
+                    String courseCode = schedule.getCourse().getCourseCode();
+                    String courseName = schedule.getCourse().getCourseName();
+                    String time = schedule.getTime();
+
+                    if (courseName.length() > 20) { // Cut the course short to only 20 words.
+                        courseName = courseName.substring(0, 20);
+                    }
+
+                    // Designing-output so everything aligns with each other.
+                    System.out.print(time);
+                    for (int timeIndention = 0; timeIndention < (time.length() == 13 ? 2 : 4); timeIndention++) {
+                        System.out.print(" ");
+                    }
+
+                    System.out.print("   " + courseName);
+
+                    /*
+                    Required for designing the correct output of the schedule, since the general name of the course varys in length
+                    We need to find the amount of spaces required for the course-code to be in the correct column by using the provided equation below.
+                    */
+
+                    int courseCodeIndention = 24 - courseName.length(); // 20 words -> only 4 indention, 19 words -> 5 indentions, etc...
+
+                    for (int nameIndention = 0; nameIndention < courseCodeIndention; nameIndention++) {
+                        System.out.print(" ");
+                    }
+
+                    System.out.print(courseCode + "            " + schedule.getClassroom() + "\n"); //12 spaces
+                }
             }
-
+            System.out.println("_____________________________________________________________________________");
         }
 
     }
@@ -179,7 +227,7 @@ public class Student {
      */
     @Override
     public String toString() {
-        return "Student's Name: " + name + "\nStudent's ID: " + universityID + "\nStudent's Semester level: " + level;
+        return "Student's Name: " + name + "\nStudent's ID: " + universityID + "\nStudent's Year: " + level + "\nCurrent Credit Hours: " + calculateCumulativeCreditHours();
     }
 
 }
