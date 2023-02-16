@@ -315,14 +315,21 @@ public class Schedule {
         return isOverlapping(course1StartTime, course1EndTime, course2StartTime, course2EndTime); // This method returns a boolean and see if the two times that we have created are overlapping with each others or not.
     }
 
-    /**                     TODO: EXPLAIN THE NEW CONDITION BELOW.
-     * The idea behind this condition can be represented by a graph to see whether the timing of the two courses are overlapping or not.
-     * Assume that we have a straight line that represents the starting point of the first course and ending point of the first and second course (Start time, End time)
-     * (8:00)                        (8:50)
-     * * ---------------------------- *
-     *                      * ------------------------------- *
-     *                   (8:30)                               (9:50)
+    /**
      *
+     * Determine whether the two dates are overlapping.
+     * There are 3 situations where they are overlap, they are:
+     *
+     * 1) (A Start) ----------------------------------------- (A End)
+     *                 (B Start) ----------------------------------------- (B End)
+     *
+     * 2) (A Start) ----------------------------------------- (A End)
+     *                (B Start) ------------------------ (B End)
+     *
+     * 3)           (A Start) ----------------------------------------- (A End)
+     *  (B Starts) ---------------------------------------------------------------------------- (B Ends)
+     *
+     * If one of these situations have occurred, then the two times are overlapping.
      *
      * @param start1 The starting time of the first course
      * @param end1   The ending time of the first course
@@ -331,8 +338,11 @@ public class Schedule {
      * @return true if they are overlapping, otherwise false.
      */
     private boolean isOverlapping(Date start1, Date end1, Date start2, Date end2) {
-        return !((end1.getTime() < start2.getTime() && start1.getTime() < start2.getTime()) ||
-                (end2.getTime() < start1.getTime() && start2.getTime() < start1.getTime()));
+        boolean bStartsInA = start1.getTime() <= start2.getTime() && start2.getTime() <= end1.getTime();
+        boolean bEndsInA = start1.getTime() <= end2.getTime() && end2.getTime() <= end1.getTime();
+        boolean aInB = start2.getTime() < start1.getTime() && end1.getTime() < end2.getTime();
+
+        return bStartsInA || bEndsInA || aInB;
     }
 
     @Override
