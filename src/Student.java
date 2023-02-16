@@ -132,7 +132,7 @@ public class Student {
      * where the student is able to modify it later.
      */
     public void registerStudentData() {
-        Schedule schedule = new Schedule(this); // come here
+        Schedule schedule = new Schedule(this);
 
         MongoCollection<Document> studentCollection = Database.getDatabase().getCollection(universityID);
         MongoCollection<Document> scheduleBlockCollection = Database.getDatabase().getCollection("ScheduleBlocks");
@@ -189,7 +189,7 @@ public class Student {
 
                     // Designing-output so everything aligns with each other.
                     System.out.print(time);
-                    for (int timeIndention = 0; timeIndention < (time.length() == 13 ? 2 : 4); timeIndention++) {
+                    for (int timeIndention = 0; timeIndention < (time.length() == 13 ? 3 : 4); timeIndention++) {
                         System.out.print(" ");
                     }
 
@@ -211,6 +211,7 @@ public class Student {
             }
             System.out.println("_____________________________________________________________________________");
         }
+        System.out.println("Total Credit Hours: " + calculateCumulativeCreditHours());
 
     }
 

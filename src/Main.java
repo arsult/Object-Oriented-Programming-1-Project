@@ -119,7 +119,7 @@ public class Main {
                     System.out.print("Enter your choice: ");
                     selection = scan.nextInt();
 
-                    if (selection == 4) {
+                    if (selection == 4) { // Brute force exiting the program
                         System.exit(0);
                     }
 
