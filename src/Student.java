@@ -189,7 +189,12 @@ public class Student {
 
                     // Designing-output so everything aligns with each other.
                     System.out.print(time);
-                    for (int timeIndention = 0; timeIndention < (time.length() == 13 ? 3 : 4); timeIndention++) {
+                    // An equation developed for the indention of schedule (design-output)
+                    int standardLengthOfTime = 13, indent = 2;
+
+                    indent += (standardLengthOfTime - time.length());
+
+                    for (int timeIndention = 0; timeIndention < indent; timeIndention++) {
                         System.out.print(" ");
                     }
 
