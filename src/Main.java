@@ -213,7 +213,7 @@ public class Main {
                                             if (currentSchedule.getDay().equalsIgnoreCase(days)) { // If it is really the day that we want to modify
                                                 // Insert the course that we want between the courses specified in position[k]. Without adding the addition operation between j[k] and i,
                                                 // the schedule would be scrambled and not sorted.
-                                                // Therefore, it is important to keep track of the position[k] + i to know where the course would land in the student's schedule
+                                                // Therefore, it is important to keep track of the position[j] + i to know where the course would land in the student's schedule
                                                 student.getSchedule().add(position[j] + i, new Schedule(null, course, timeTables.getString(Integer.toString(choice)), "TBA", days));
                                                 duplicated.add(days); // add the day to arraylist since we have already modified it.
                                             }
