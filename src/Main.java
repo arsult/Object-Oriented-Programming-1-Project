@@ -141,9 +141,25 @@ public class Main {
 
                     } while (course == null);
 
+
                     switch (selection) {
 
                         case 1:
+
+                            // Attempting to add an already existing course.
+                            boolean add = false;
+
+                            for (Schedule studentSchedule : student.getSchedule()) {
+                                if (studentSchedule.getCourse().getCourseCode().equalsIgnoreCase(courseCode)) {
+                                    add = true;
+                                    break;
+                                }
+                            }
+
+                            if (add) {
+                                System.out.println("This course is already in the schedule.");
+                                System.exit(0);
+                            }
 
                             System.out.println();
                             System.out.println("Attempting to add the " + course.getCourseName() + " Course");
@@ -233,18 +249,31 @@ public class Main {
 
                         case 2:
 
-                            System.out.println();
-                            System.out.println("Attempting to remove the " + course.getCourseName() + " Course");
-                            System.out.println();
+                            boolean remove = false;
 
-                            // Get the estimated total credit hours after removing the course.
-                            int creditHours = student.calculateCumulativeCreditHours() - course.getCourseCredits();
+                            for (Schedule studentSchedule : student.getSchedule()) {
+                                if (studentSchedule.getCourse().getCourseCode().equalsIgnoreCase(courseCode)) {
+                                    remove = true;
+                                    break;
+                                }
+                            }
 
-                            if (creditHours < 9) {
-                                System.out.println("You cannot remove this course, because the remaining hours on the schedule will be fewer than 9.");
+                            if (remove) {
+                                System.out.println();
+                                System.out.println("Attempting to remove the " + course.getCourseName() + " Course");
+                                System.out.println();
+
+                                // Get the estimated total credit hours after removing the course.
+                                int creditHours = student.calculateCumulativeCreditHours() - course.getCourseCredits();
+
+                                if (creditHours < 9) {
+                                    System.out.println("You cannot remove this course, because the remaining hours on the schedule will be fewer than 9.");
+                                } else {
+                                    schedule.updateSchedule(schedule.removeCourse(courseCode));
+                                    System.out.println(course.getCourseName() + " (" + courseCode + ") has been removed from the schedule successfully!");
+                                }
                             } else {
-                                schedule.updateSchedule(schedule.removeCourse(courseCode));
-                                System.out.println(course.getCourseName() + " (" + courseCode + ") has been removed from the schedule successfully!");
+                                System.out.println("This course is not in the schedule.");
                             }
 
                             break;
