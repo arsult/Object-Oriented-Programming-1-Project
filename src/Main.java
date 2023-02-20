@@ -141,7 +141,6 @@ public class Main {
 
                     } while (course == null);
 
-
                     switch (selection) {
 
                         case 1:
@@ -259,22 +258,24 @@ public class Main {
                             }
 
                             if (remove) {
-                                System.out.println();
-                                System.out.println("Attempting to remove the " + course.getCourseName() + " Course");
-                                System.out.println();
-
-                                // Get the estimated total credit hours after removing the course.
-                                int creditHours = student.calculateCumulativeCreditHours() - course.getCourseCredits();
-
-                                if (creditHours < 9) {
-                                    System.out.println("You cannot remove this course, because the remaining hours on the schedule will be fewer than 9.");
-                                } else {
-                                    schedule.updateSchedule(schedule.removeCourse(courseCode));
-                                    System.out.println(course.getCourseName() + " (" + courseCode + ") has been removed from the schedule successfully!");
-                                }
-                            } else {
                                 System.out.println("This course is not in the schedule.");
+                                System.exit(0);
                             }
+
+                            System.out.println();
+                            System.out.println("Attempting to remove the " + course.getCourseName() + " Course");
+                            System.out.println();
+
+                            // Get the estimated total credit hours after removing the course.
+                            int creditHours = student.calculateCumulativeCreditHours() - course.getCourseCredits();
+
+                            if (creditHours < 9) {
+                                System.out.println("You cannot remove this course, because the remaining hours on the schedule will be fewer than 9.");
+                            } else {
+                                schedule.updateSchedule(schedule.removeCourse(courseCode));
+                                System.out.println(course.getCourseName() + " (" + courseCode + ") has been removed from the schedule successfully!");
+                            }
+
 
                             break;
 
