@@ -257,7 +257,7 @@ public class Main {
                                 }
                             }
 
-                            if (remove) {
+                            if (!remove) {
                                 System.out.println("This course is not in the schedule.");
                                 System.exit(0);
                             }
