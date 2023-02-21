@@ -21,7 +21,7 @@ public class Main {
         Student student = new Student();
 
         System.out.println();
-        System.out.println("\t\t\t Welcome to UJ Courses and me.ted.schedules.Schedule Project");
+        System.out.println("\t\t\t Welcome to UJ Courses and Schedule Project");
         System.out.println();
 
         String id;
