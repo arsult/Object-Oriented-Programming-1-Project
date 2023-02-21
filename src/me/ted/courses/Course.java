@@ -101,7 +101,7 @@ public class Course {
     }
 
     /**
-     * This method takes a string (me.ted.courses.Course Code) and try to find the object of the course in the ArrayList mention above.
+     * This method takes a string (Course Code) and try to find the object of the course in the ArrayList mention above.
      *
      * @param courseCode, recieve the course code only
      * @return the object of the course from the ArrayList allCourses

@@ -15,9 +15,9 @@ import java.util.Date;
 
 /*
  * This class is designed to read the schedule from the ScheduleBlocks file or the student file
- * also aside from reading it can also display the me.ted.schedules.Schedule of the student or from the ScheduleBlock file
+ * also aside from reading it can also display the Schedule of the student or from the ScheduleBlock file
  * With this class we are able to manipulate data and add commands we wish to do on a student's schedule as such
- *  Removing a me.ted.courses.Course or View a me.ted.courses.Course details easily.
+ *  Removing a Course or View a Course details easily.
  *
  */
 
@@ -176,7 +176,7 @@ public class Schedule {
 
         // We will use this "header" to find the document in the collection that also matches the university id of the student
         Document header = new Document("_id", student.getUniversityID());
-        // We will try to look for the key name "me.ted.schedules.Schedule" and insert the value "schedule" in it.
+        // We will try to look for the key name "Schedule" and insert the value "schedule" in it.
         Document key_value = new Document("Schedule", schedule);
 
         // This database command updates the already existing schedule of the student in the database.
@@ -233,6 +233,7 @@ public class Schedule {
         for (int i = 0; i < modifiedSchedule.size(); i++) {
             if (modifiedSchedule.get(i) != null && modifiedSchedule.get(i).getCourse() != null && modifiedSchedule.get(i).getCourse().getCourseCode().equalsIgnoreCase(courseCode)) {
                 modifiedSchedule.remove(modifiedSchedule.get(i)); // Remove the course wanted.
+                System.out.println("Removed wanted course");
             }
         }
         return modifiedSchedule;

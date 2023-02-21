@@ -152,7 +152,7 @@ public class Student {
 
         String scheduleBlock = scheduleBlockCollection.find(new Document("_id", Database.scheduleBlocksObjectId)).first().getString("ScheduleBlock_" + level + "_" + block);
 
-        document.append("me.ted.schedules.Schedule", scheduleBlock);
+        document.append("Schedule", scheduleBlock);
         studentCollection.insertOne(document);
 
         this.schedule = schedule.readSchedule();
@@ -174,6 +174,8 @@ public class Student {
 
 
     public void viewStudentSchedule() {
+        schedule = new Schedule(this).readSchedule();
+
         System.out.println("_____________________________________________________________________________");
 
         for (int i = 0; i < Days.values().length; i++) {
