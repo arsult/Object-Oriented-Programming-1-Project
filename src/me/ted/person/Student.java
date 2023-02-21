@@ -1,4 +1,10 @@
+package me.ted.person;
+
 import com.mongodb.client.MongoCollection;
+import me.ted.courses.Course;
+import me.ted.database.Database;
+import me.ted.schedules.Schedule;
+import me.ted.utils.Days;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -146,7 +152,7 @@ public class Student {
 
         String scheduleBlock = scheduleBlockCollection.find(new Document("_id", Database.scheduleBlocksObjectId)).first().getString("ScheduleBlock_" + level + "_" + block);
 
-        document.append("Schedule", scheduleBlock);
+        document.append("me.ted.schedules.Schedule", scheduleBlock);
         studentCollection.insertOne(document);
 
         this.schedule = schedule.readSchedule();

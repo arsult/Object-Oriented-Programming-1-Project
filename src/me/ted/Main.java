@@ -1,3 +1,9 @@
+package me.ted;
+
+import me.ted.courses.Course;
+import me.ted.database.Database;
+import me.ted.person.Student;
+import me.ted.schedules.Schedule;
 import org.bson.Document;
 
 import java.text.ParseException;
@@ -15,7 +21,7 @@ public class Main {
         Student student = new Student();
 
         System.out.println();
-        System.out.println("\t\t\t Welcome to UJ Courses and Schedule Project");
+        System.out.println("\t\t\t Welcome to UJ Courses and me.ted.schedules.Schedule Project");
         System.out.println();
 
         String id;
@@ -57,7 +63,7 @@ public class Main {
                 student.registerStudentData();
 
                 System.out.println();
-                System.out.println("Student " + student.getName() + " with ID " + student.getUniversityID() + " has been successfully registered.");
+                System.out.println("me.ted.person.Student " + student.getName() + " with ID " + student.getUniversityID() + " has been successfully registered.");
 
             } else { //No, or invalid input
 
@@ -65,7 +71,7 @@ public class Main {
                 System.exit(0);
             }
 
-        } else { // Student does exist
+        } else { // me.ted.person.Student does exist
 
             Schedule schedule = new Schedule(student);
 
@@ -161,7 +167,7 @@ public class Main {
                             }
 
                             System.out.println();
-                            System.out.println("Attempting to add the " + course.getCourseName() + " Course");
+                            System.out.println("Attempting to add the " + course.getCourseName() + " me.ted.courses.Course");
                             System.out.println();
                             System.out.println("Choose one of the following timetables for this course.");
                             System.out.println();

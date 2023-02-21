@@ -1,4 +1,10 @@
+package me.ted.schedules;
+
 import com.mongodb.client.MongoCollection;
+import me.ted.courses.Course;
+import me.ted.database.Database;
+import me.ted.person.Student;
+import me.ted.utils.Days;
 import org.bson.Document;
 
 import java.text.DateFormat;
@@ -9,9 +15,9 @@ import java.util.Date;
 
 /*
  * This class is designed to read the schedule from the ScheduleBlocks file or the student file
- * also aside from reading it can also display the Schedule of the student or from the ScheduleBlock file
+ * also aside from reading it can also display the me.ted.schedules.Schedule of the student or from the ScheduleBlock file
  * With this class we are able to manipulate data and add commands we wish to do on a student's schedule as such
- *  Removing a Course or View a Course details easily.
+ *  Removing a me.ted.courses.Course or View a me.ted.courses.Course details easily.
  *
  */
 
@@ -170,7 +176,7 @@ public class Schedule {
 
         // We will use this "header" to find the document in the collection that also matches the university id of the student
         Document header = new Document("_id", student.getUniversityID());
-        // We will try to look for the key name "Schedule" and insert the value "schedule" in it.
+        // We will try to look for the key name "me.ted.schedules.Schedule" and insert the value "schedule" in it.
         Document key_value = new Document("Schedule", schedule);
 
         // This database command updates the already existing schedule of the student in the database.
