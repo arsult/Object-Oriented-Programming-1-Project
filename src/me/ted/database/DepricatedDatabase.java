@@ -19,11 +19,11 @@ import java.util.logging.Logger;
  *
  */
 
-public class Database {
+public class DepricatedDatabase {
 
     // Set up our data fields to handle the connection
     private static MongoClient mongoClient;
-    private static MongoDatabase database;
+    private static MongoDatabase mongoDatabase;
 
     // IDs of useful documents that should not be changed.
     public static final ObjectId coursesObjectId = new ObjectId("63e66c0a667c9ba31d638f16");
@@ -33,7 +33,7 @@ public class Database {
     /**
      * This method handles the setup to our data base
      */
-    public static void setupDatabase() {
+    public static void connectDatabase() {
 
         // Hide unnecessary outputs from mongoDB
         Logger.getLogger("org.mongodb.driver").setLevel(Level.SEVERE);
@@ -43,10 +43,9 @@ public class Database {
 
         // Connect our project to the database
         mongoClient = MongoClients.create("mongodb://ted:pu6YmPHRFFjKvgvX@ac-zkqzsck-shard-00-00.dkh7h8v.mongodb.net:27017,ac-zkqzsck-shard-00-01.dkh7h8v.mongodb.net:27017,ac-zkqzsck-shard-00-02.dkh7h8v.mongodb.net:27017/?ssl=true&replicaSet=atlas-aan9j0-shard-0&authSource=admin&retryWrites=true&w=majority");
-        database = mongoClient.getDatabase("StudentSchedules");
+        mongoDatabase = mongoClient.getDatabase("StudentSchedules");
 
         System.out.println("Connected to the database successfully!");
-
     }
 
     /**
@@ -60,7 +59,7 @@ public class Database {
 
         boolean exists = false;
 
-        for (String str : database.listCollectionNames()) {
+        for (String str : mongoDatabase.listCollectionNames()) {
             if (str.equalsIgnoreCase(collectionName)) {
                 exists = true;
                 break;
@@ -79,7 +78,7 @@ public class Database {
     public static int countCollections() {
 
         int count = 0;
-        for (Document ignored : database.listCollections()) {
+        for (Document ignored : mongoDatabase.listCollections()) {
             count++;
         }
 
@@ -87,7 +86,7 @@ public class Database {
     }
 
     public static MongoDatabase getDatabase() {
-        return database;
+        return mongoDatabase;
     }
 
     public static MongoClient getMongoClient() {

@@ -6,5 +6,14 @@ public enum Days {
     Monday,
     Tuesday,
     Wednesday,
-    Thursday
+    Thursday;
+
+    public char getFirstLetter() {
+        if (this == Thursday) {
+            return 'R';
+        }
+
+        return Character.toUpperCase(name().charAt(0));
+    }
+
 }

@@ -1,9 +1,11 @@
 package me.ted;
 
 import me.ted.courses.Course;
+import me.ted.database.DataCollection;
 import me.ted.database.Database;
-import me.ted.person.Student;
+import me.ted.person.student.Student;
 import me.ted.schedules.Schedule;
+import me.ted.utils.Timetable;
 import org.bson.Document;
 
 import java.text.ParseException;
@@ -13,8 +15,9 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws ParseException {
+        Database.connectDatabase(); // Establish connection to the database
+        Database.setupDatabase();
 
-        Database.setupDatabase(); // Establish connection to the database
         Course.setupCourses(); // Set up all courses
 
         Scanner scan = new Scanner(System.in);
@@ -40,7 +43,7 @@ public class Main {
 
         student.setUniversityID(id);
 
-        if (!Database.exists(student.getUniversityID())) {
+        if (!Database.studentDatabase.exists(student.getUniversityID())) {
 
             System.out.println();
             System.out.println("This student does not exists in the database.");
@@ -49,7 +52,7 @@ public class Main {
             String input = scan.nextLine();
             char answer = input.charAt(0);
 
-            if (answer == 'Y' || answer == 'y') { // Proceed to add student
+            if (answer == 'Y' || answer == 'y') {
 
                 System.out.println("Please enter the following student information: ");
                 System.out.println();
@@ -65,17 +68,16 @@ public class Main {
                 System.out.println();
                 System.out.println("Student " + student.getName() + " with ID " + student.getUniversityID() + " has been successfully registered.");
 
-            } else { //No, or invalid input
+            } else {
 
                 System.out.println("Exiting Program");
                 System.exit(0);
             }
 
-        } else { // Student does exist
+        } else {
 
             Schedule schedule = new Schedule(student);
 
-            // Read student's data
             student.readStudentData();
             schedule.readSchedule();
 
@@ -128,7 +130,7 @@ public class Main {
                         System.out.print("Enter your choice: ");
                         selection = scan.nextInt();
 
-                        if (selection == 4) { // Brute force exiting the program
+                        if (selection == 4) {
                             System.exit(0);
                         }
 
@@ -154,7 +156,6 @@ public class Main {
 
                             case 1:
 
-                                // Attempting to add an already existing course.
                                 boolean add = false;
 
                                 for (Schedule studentSchedule : student.getSchedule()) {
@@ -175,11 +176,14 @@ public class Main {
                                 System.out.println("Choose one of the following timetables for this course.");
                                 System.out.println();
 
-                                // Get all the times that the student can choose to add their course in by the database.
-                                Document timeTables = Database.getDatabase().getCollection("Timetable").find(new Document("_id", Database.timeTableObjectId)).first();
+                                Timetable timetable = new Timetable();
 
-                                // This loop shows the student the time and day they can choose to add their course in.
-                                for (int i = 1; i < timeTables.size(); i++) { // We are starting from the index 1 because we do not want to show the _id key-value
+                                timetable.printTimetable();
+                                Document timeTables = Database.utilsDatabase.getDatabase().getCollection("Timetable").find(new Document("_id", Database.timeTableObjectId)).first();
+
+                                /*
+
+                                for (int i = 1; i < timeTables.size(); i++) {
                                     String days;
                                     if (i % 2 == 0) {
                                         days = "(S T R)";
@@ -189,6 +193,8 @@ public class Main {
                                     System.out.println(i + ". " + timeTables.getString(Integer.toString(i)) + " " + days);
                                 }
 
+
+                                 */
                                 System.out.println();
                                 System.out.print("Enter your choice: ");
                                 Scanner scanner = new Scanner(System.in);
@@ -197,49 +203,41 @@ public class Main {
                                 boolean allow = schedule.canAddCourse(choice);
 
                                 if (allow) {
-                                    // If the total hours with the new course is less than 18 then proceed to add the course
                                     if (student.calculateCumulativeCreditHours() + course.getCourseCredits() < 18) {
 
-                                        // Get the starting time of the course to compare it with other courses and see where it fits in the schedule.
                                         int courseToAddTime = Integer.parseInt(timeTables.getString(Integer.toString(choice)).split(" - ")[0].split(":")[0]);
-                                        // This handles to where to put the course between the other courses in the schedule
                                         int[] position = new int[Schedule.getDaysBasedOnIndex(choice).length];
 
-                                        for (Schedule currentSchedule : student.getSchedule()) { // Loop throughout the schedules, so we can work with their data
-                                            for (int i = 0; i < Schedule.getDaysBasedOnIndex(choice).length; i++) { // Loop throughout the days, so we can select only the days we want.
+                                        for (Schedule currentSchedule : student.getSchedule()) {
+                                            for (int i = 0; i < Schedule.getDaysBasedOnIndex(choice).length; i++) {
 
                                                 String days = Schedule.getDaysBasedOnIndex(choice)[i];
 
-                                                // the 2nd condition is a must to use since there are days with brakes, and they do not contain any courses
                                                 if (currentSchedule.getDay().equalsIgnoreCase(days) && !currentSchedule.getTime().isEmpty()) {
-                                                    // get the schedule course time so we can compare them
                                                     int currentCourseTime = Integer.parseInt(currentSchedule.getTime().split(" - ")[0].split(":")[0]);
 
-                                                    if (courseToAddTime > currentCourseTime) { // if the course that we want to add is later than the courses we already have
-                                                        position[i]++; // increase it position on the schedule
+                                                    if (courseToAddTime > currentCourseTime) {
+                                                        position[i]++;
                                                     }
                                                 }
                                             }
                                         }
 
-                                        ArrayList<String> duplicated = new ArrayList<>(); // An arraylist to hold the duplicated courses in our schedule
+                                        ArrayList<String> duplicated = new ArrayList<>();
 
-                                        for (int i = 0; i < student.getSchedule().size(); i++) { //Loop throughout the schedules so we can work with their data
+                                        for (int i = 0; i < student.getSchedule().size(); i++) {
                                             Schedule currentSchedule = student.getSchedule().get(i);
 
-                                            for (int j = 0; j < Schedule.getDaysBasedOnIndex(choice).length; j++) {  // Loop throughout the days so we can select only the days we want.
+                                            for (int j = 0; j < Schedule.getDaysBasedOnIndex(choice).length; j++) {
                                                 String days = Schedule.getDaysBasedOnIndex(choice)[j];
 
-                                                if (duplicated.contains(days)) { // If the day is already have been used, skip this iteration.
+                                                if (duplicated.contains(days)) {
                                                     continue;
                                                 }
 
-                                                if (currentSchedule.getDay().equalsIgnoreCase(days)) { // If it is really the day that we want to modify
-                                                    // Insert the course that we want between the courses specified in position[k]. Without adding the addition operation between j[k] and i,
-                                                    // the schedule would be scrambled and not sorted.
-                                                    // Therefore, it is important to keep track of the position[j] + i to know where the course would land in the student's schedule
+                                                if (currentSchedule.getDay().equalsIgnoreCase(days)) {
                                                     student.getSchedule().add(position[j] + i, new Schedule(null, course, timeTables.getString(Integer.toString(choice)), "TBA", days));
-                                                    duplicated.add(days); // add the day to arraylist since we have already modified it.
+                                                    duplicated.add(days);
                                                 }
                                             }
                                         }
@@ -275,7 +273,6 @@ public class Main {
                                 System.out.println("Attempting to remove the " + course.getCourseName() + " Course");
                                 System.out.println();
 
-                                // Get the estimated total credit hours after removing the course.
                                 int creditHours = student.calculateCumulativeCreditHours() - course.getCourseCredits();
 
                                 if (creditHours < 9) {
