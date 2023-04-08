@@ -4,6 +4,8 @@ package me.ted.database;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import me.ted.faculties.Department;
+import me.ted.faculties.Faculty;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -28,8 +30,23 @@ public class Database {
         this.database = database;
 
         if (mongoClient.getDatabase(database.getCollectionName()).listCollectionNames().first() == null) {
-            mongoClient.getDatabase(database.getCollectionName()).createCollection("admin");
-            System.out.println("Created a new database named: " + database.getCollectionName());
+            boolean created = false;
+
+            for (Faculty faculty : Faculty.values()) {
+                mongoClient.getDatabase(database.getCollectionName()).createCollection(faculty.getFancyName());
+
+                for (Department department : Department.values()) {
+                    if (department.getFaculty() == faculty) {
+                        mongoClient.getDatabase(database.getCollectionName()).getCollection(faculty.getFancyName()).insertOne(new Document("_id", department.getFancyName()));
+                    }
+                }
+
+                created = true;
+            }
+
+            if (created) {
+                System.out.println("Created a new database named: " + database.getCollectionName());
+            }
         }
 
     }

@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import me.ted.Main;
 import me.ted.courses.Course;
 import me.ted.database.Database;
 import me.ted.person.student.Student;
